@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:notes_app/models/note.dart';
 
-class ItemNote extends StatelessWidget {
-  Note note;
+class BuildItemNote extends StatelessWidget {
+  final Note note;
+  final Function(Note) onNoteClicked;
 
-  ItemNote({Key? key, required this.note}) : super(key: key);
+  const BuildItemNote({
+    Key? key,
+    required this.note,
+    required this.onNoteClicked,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Card(
       elevation: 4,
       child: ListTile(
+        onTap: () => onNoteClicked(note),
         leading: Icon(
           Icons.circle,
           size: 50,

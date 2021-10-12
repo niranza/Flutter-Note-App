@@ -14,11 +14,11 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   List<Note> _noteList = [];
 
-  Future<dynamic> _navigateToAddEditNote() async =>
-      await Navigator.pushNamed(context, "/add-edit");
-
-  void _saveNote() =>
-      NoteStorage.saveNote(Note("title", "content", null, null));
+  Future<dynamic> _navigateToAddEditNote(Note? note) async {
+    return note == null
+        ? await Navigator.pushNamed(context, "/add-edit")
+        : await Navigator.pushNamed(context, "/add-edit", arguments: note);
+  }
 
   void _getNotes() async {
     List<Note> noteList = await NoteStorage.getAllNotes();
@@ -41,17 +41,19 @@ class _HomeState extends State<Home> {
         centerTitle: true,
         backgroundColor: Colors.green,
       ),
-      body: BuildNoteList(noteList: _noteList),
+      body: BuildNoteList(
+        noteList: _noteList,
+        onNoteClicked: (Note note) async {
+          await _navigateToAddEditNote(note);
+          _getNotes();
+        },
+      ),
       floatingActionButton: FabAddNote(
         onPressed: () async {
-          dynamic result = await _navigateToAddEditNote();
-          setState(() {
-            _saveNote();
-            _getNotes();
-          });
+          await _navigateToAddEditNote(null);
+          _getNotes();
         },
       ),
     );
   }
 }
-

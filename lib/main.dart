@@ -11,9 +11,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       initialRoute: "/",
-      routes: {
-        "/": (context) => Home(),
-        "/add-edit": (context) => AddEditNote(),
+      onGenerateRoute: (RouteSettings settings) {
+        var routes = <String, WidgetBuilder>{
+          "/": (ctx) => Home(),
+          "/add-edit": (ctx) => AddEditNote(currentNote: settings.arguments),
+        };
+        WidgetBuilder? builder = routes[settings.name]!;
+        return MaterialPageRoute(builder: (ctx) => builder(ctx));
       },
     );
   }

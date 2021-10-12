@@ -17,6 +17,7 @@ class NoteStorage {
   static void saveNote(Note note) async {
     File file = File(await _getNotesPath("${note.id}.txt"));
     file.writeAsString(jsonEncode(note));
+    print("Note saved -> ${note.title}");
   }
 
   static Future<List<Note>> getAllNotes() async {

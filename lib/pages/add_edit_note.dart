@@ -4,12 +4,14 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:notes_app/models/note.dart';
 import 'package:notes_app/storage/note_storage.dart';
 import 'package:notes_app/utils/contants.dart';
+import 'package:notes_app/widgets/edit_note.dart';
 
 class AddEditNote extends StatefulWidget {
   final Object? currentNote;
 
-  Note _getCurrentNote() =>
-      currentNote == null ? Note("", "", null, null) : currentNote as Note;
+  Note _getCurrentNote() => currentNote == null
+      ? Note("", "", null, null, null)
+      : currentNote as Note;
 
   late final Note _currentNote = _getCurrentNote();
 
@@ -53,6 +55,7 @@ class _AddEditNoteState extends State<AddEditNote> {
         return Future.value(false);
       },
       child: Scaffold(
+        backgroundColor: Colors.blue[50],
         appBar: AppBar(
           title: Text("Edit Note"),
           centerTitle: true,
@@ -86,75 +89,6 @@ class _AddEditNoteState extends State<AddEditNote> {
             );
           },
           backgroundColor: Color(_currentNote.color),
-        ),
-      ),
-    );
-  }
-}
-
-class BuildEditNote extends StatefulWidget {
-  final Note currentNote;
-  final Function(int) saveNote;
-
-  const BuildEditNote({
-    Key? key,
-    required this.currentNote,
-    required this.saveNote,
-  }) : super(key: key);
-
-  @override
-  State<BuildEditNote> createState() => _BuildEditNoteState();
-}
-
-class _BuildEditNoteState extends State<BuildEditNote> {
-  var titleController = TextEditingController();
-  var contentController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    titleController.text = widget.currentNote.title;
-    contentController.text = widget.currentNote.content;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scrollbar(
-      child: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        padding: EdgeInsets.symmetric(horizontal: 6, vertical: 6),
-        child: Column(
-          children: [
-            TextField(
-              controller: titleController,
-              onChanged: (newTitle) {
-                widget.currentNote.title = newTitle;
-                widget.saveNote(saveDelayInSeconds);
-              },
-              maxLength: 40,
-              decoration: InputDecoration(
-                hintText: "Title",
-                contentPadding: EdgeInsets.all(10),
-                border: OutlineInputBorder(),
-              ),
-            ),
-            TextField(
-              controller: contentController,
-              onChanged: (newContent) {
-                widget.currentNote.content = newContent;
-                widget.saveNote(saveDelayInSeconds);
-              },
-              maxLength: 30000,
-              textInputAction: TextInputAction.newline,
-              keyboardType: TextInputType.multiline,
-              maxLines: 1000,
-              decoration: InputDecoration(
-                hintText: "Content",
-                contentPadding: EdgeInsets.all(10),
-                border: OutlineInputBorder(),
-              ),
-            ),
-          ],
         ),
       ),
     );

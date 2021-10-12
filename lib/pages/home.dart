@@ -15,6 +15,7 @@ class _HomeState extends State<Home> {
   List<Note> _noteList = [];
 
   Future<dynamic> _navigateToAddEditNote(Note? note) async {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
     return note == null
         ? await Navigator.pushNamed(context, "/add-edit")
         : await Navigator.pushNamed(context, "/add-edit", arguments: note);
@@ -22,6 +23,7 @@ class _HomeState extends State<Home> {
 
   void _getNotes() async {
     List<Note> noteList = await NoteStorage.getAllNotes();
+    noteList.sort((a, b) => b.formattedDate.compareTo(a.formattedDate));
     setState(() {
       _noteList = noteList;
     });
@@ -36,6 +38,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.blue[50],
       appBar: AppBar(
         title: Text("My Notes"),
         centerTitle: true,

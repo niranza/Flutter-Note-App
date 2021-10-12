@@ -14,28 +14,29 @@ class BuildItemNote extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Colors.white,
       elevation: 4,
       child: ListTile(
         onTap: () => onNoteClicked(note),
         leading: Icon(
           Icons.circle,
-          size: 50,
+          size: 55,
           color: Color(note.color),
         ),
         title: Text(
-          note.title,
+          note.title.isEmpty ? "no-title" : note.title,
           style: TextStyle(
-            fontSize: 35,
-            color: Colors.grey[900],
+            fontSize: 40,
+            color: note.title.isEmpty ? Colors.grey[700] : Colors.grey[900],
           ),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
         subtitle: Text(
-          note.content,
+          note.formattedDate,
           style: TextStyle(
-            color: Colors.grey[800],
-            fontSize: 20,
+            color: Colors.grey[600],
+            fontSize: 17,
           ),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,

@@ -18,6 +18,8 @@ class BuildNoteList extends StatefulWidget {
 }
 
 class _BuildNoteListState extends State<BuildNoteList> {
+  late Note _lastDeletedNote;
+
   @override
   Widget build(BuildContext context) {
     List<Note> noteList() => widget.noteList;
@@ -32,10 +34,9 @@ class _BuildNoteListState extends State<BuildNoteList> {
                   return Dismissible(
                     key: Key(noteList()[index].id),
                     onDismissed: (direction) {
-                      NoteStorage.deleteNote(noteList()[index]);
-                      setState(() {
-                        noteList().removeAt(index);
-                      });
+                      _lastDeletedNote = noteList()[index];
+                      NoteStorage.deleteNote(_lastDeletedNote);
+                      setState(() => noteList().removeAt(index));
 
                       ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
@@ -44,6 +45,13 @@ class _BuildNoteListState extends State<BuildNoteList> {
                         duration: Duration(seconds: 2),
                         dismissDirection: DismissDirection.horizontal,
                         behavior: SnackBarBehavior.floating,
+                        action: SnackBarAction(
+                          label: "UNDO",
+                          onPressed: () {
+                            NoteStorage.saveNote(_lastDeletedNote);
+                            setState(() => noteList().add(_lastDeletedNote));
+                          },
+                        ),
                       ));
                     },
                     child: BuildItemNote(

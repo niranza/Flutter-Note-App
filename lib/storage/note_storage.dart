@@ -20,7 +20,6 @@ class NoteStorage {
     note.formattedDate = formatter.format(DateTime.now());
     File file = File(await _getNotesPath("${note.id}.txt"));
     file.writeAsString(jsonEncode(note));
-    print("Note saved -> ${note.title}");
   }
 
   static Future<List<Note>> getAllNotes() async {
@@ -36,7 +35,6 @@ class NoteStorage {
       await futureString.then((value) {
         if (value != null) {
           Map data = jsonDecode(value);
-          print("noteDate-> ${data["formatted_date"] as String}");
           noteList.add(Note(
             data["title"] as String,
             data["content"] as String,

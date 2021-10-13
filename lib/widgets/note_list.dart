@@ -49,7 +49,9 @@ class _BuildNoteListState extends State<BuildNoteList> {
                           label: "UNDO",
                           onPressed: () {
                             NoteStorage.saveNote(_lastDeletedNote);
-                            setState(() => noteList().add(_lastDeletedNote));
+                            noteList().add(_lastDeletedNote);
+                            setState(() => noteList().sort((a, b) =>
+                                b.formattedDate.compareTo(a.formattedDate)));
                           },
                         ),
                       ));
